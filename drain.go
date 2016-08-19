@@ -1,9 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"github.com/mkideal/cli"
-	"net/http"
+	"github.com/penberg/go-scylla-api/scylla"
 )
 
 var _ = app.Register(&cli.Command{
@@ -21,9 +20,6 @@ type drainT struct {
 
 func drain(ctx *cli.Context) error {
 	argv := ctx.Argv().(*drainT)
-	baseURL := fmt.Sprintf("http://%s:%s", argv.Host, argv.Port)
-	if _, err := http.Post(baseURL + "/storage_service/drain", "application/json", nil); err != nil {
-		return err
-	}
-	return nil
+	client := scylla.NewClient(argv.Host, argv.Port)
+	return client.Drain()
 }
