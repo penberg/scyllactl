@@ -7,7 +7,7 @@ import (
 
 var _ = app.Register(&cli.Command{
 	Name: "rebuild",
-	Desc: "Rebuild one or more column families",
+	Desc: "Rebuild data by streaming from other nodes",
 	Argv: func() interface{} { return new(rebuildT) },
 	Fn:   rebuild,
 })
@@ -16,7 +16,7 @@ type rebuildT struct {
 	cli.Helper
 	Host     string `cli:"host" usage:"Node hostname or IP address" dft:"localhost"`
 	Port     string `cli:"port" usage:"API server port number" dft:"10000"`
-	SourceDC string `cli:"source-dc" usage:"Keyspace to rebuild"`
+	SourceDC string `cli:"source-dc" usage:"Name of datacenter to stream from. If not specified, picks any datacenter."`
 }
 
 func rebuild(ctx *cli.Context) error {
